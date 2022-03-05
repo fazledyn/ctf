@@ -1,0 +1,6 @@
+## Instructions
+openssl x509 -pubkey -noout -in cert > key.pub```sh
+openssl x509 -pubkey -noout -in cert > key.pub
+
+
+```
