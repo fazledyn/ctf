@@ -1,1 +1,0 @@
-Bob was not sure about the safety of RSA to hide his secret and decided to implement his version of RSA. He split his secret into 3 parts. He encrypted each part of the secret using different modulus. He wanted his encryption to be hack-proof and generated 3 primes(p,q,r) using 2048 bits. e=65537

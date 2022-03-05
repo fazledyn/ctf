@@ -1,0 +1,4 @@
+- Decompile APK
+- Go to MainActivity.java
+- Flag in resources/res/values/strings.xml
+

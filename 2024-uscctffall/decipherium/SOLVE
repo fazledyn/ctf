@@ -1,0 +1,6 @@
+- The message looks like it contains some periodic elements (Te, I, etc.)
+- Split them using some formula (ape.py)
+- Then convert each elements to their respective atomic number (ape2.py)
+- Divide them into pair of hex
+- Decode the hex (cyberchef)
+

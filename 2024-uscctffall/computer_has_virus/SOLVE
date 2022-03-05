@@ -1,0 +1,5 @@
+- Open the EML file using some email client or online tool
+- Download the EXE
+- Decompile the EXE, look for a base64 looking string
+- Extract the string, clean it up (DUMP)
+- Decode to base64 and gunzip decompress it

@@ -1,0 +1,5 @@
+run ape.py
+then go to the endpoint -.-
+
+reason:
+Main confirmed vulnerability: arbitrary file write → Python code overwrite → Flask debug autoreload triggers malicious code

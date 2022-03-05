@@ -1,0 +1,13 @@
+~/github/phoenix-ctf-2025/crypto-confusion   30s
+(env) ❯ python3 ape.py
+Enter the secret ciphertext (hex): 91e0d2801b20a04dcefa6e6eb1d546e259a70465fd31b7f2dfaa0227b8ad032bfb23ccc3ca860334be798f758c3c896367730437c38037e297a4883eec58f376
+Sending ciphertext block to decrypt(): 59a70465fd31b7f2dfaa0227b8ad032b
+Enter plaintext = (output from decrypt(59a70465fd31b7f2dfaa0227b8ad032b)): f78cb3e76016c47dface595a80f820d6
+Sending ciphertext block to decrypt(): fb23ccc3ca860334be798f758c3c8963
+Enter plaintext = (output from decrypt(fb23ccc3ca860334be798f758c3c8963)): 389e2951cc0983dfe6cb32179595344d
+Sending ciphertext block to decrypt(): 67730437c38037e297a4883eec58f376
+Enter plaintext = (output from decrypt(67730437c38037e297a4883eec58f376)): 9d47f9fbfcb631038f0489738a3a8f65
+
+Recovered plaintext:
+flag{6d044741-f4a9-4184-9a00-87ffd5860271}
+

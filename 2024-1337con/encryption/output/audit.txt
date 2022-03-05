@@ -1,0 +1,21 @@
+Foremost version 1.5.7 by Jesse Kornblum, Kris Kendall, and Nick Mikus
+Audit File
+
+Foremost started at Sat Nov 26 12:21:51 2022
+Invocation: foremost container 
+Output directory: /home/dyn/1337con/encryption/output
+Configuration file: /etc/foremost.conf
+------------------------------------------------------------------
+File: container
+Start: Sat Nov 26 12:21:51 2022
+Length: 100 MB (104857600 bytes)
+ 
+Num	 Name (bs=512)	       Size	 File Offset	 Comment 
+
+Finish: Sat Nov 26 12:21:53 2022
+
+0 FILES EXTRACTED
+	
+------------------------------------------------------------------
+
+Foremost finished at Sat Nov 26 12:21:53 2022

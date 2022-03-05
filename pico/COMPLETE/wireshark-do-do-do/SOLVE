@@ -1,5 +1,0 @@
-1. Open Wireshark
-2. Apply http3 filter
-3. Scroll and browse the packets
-4. In one packet, we can find a ROT-13 encrypted string.
-5. Decode and you get flag

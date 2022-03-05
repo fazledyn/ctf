@@ -1,0 +1,39 @@
+<html>
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+  <title>Pat Pat Generator</title>
+  <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin='anonymous'>
+  <link href='//fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap' rel='stylesheet'>
+  <link rel='stylesheet' href='/static/css/main.css' />
+  <meta name="author" content="rayhan0x01">
+</head>
+<body>
+<div id='main' class='container'>
+  <h1 id='title'>✨ Pat Pat Generator ✨</h1>
+  <p class='description'>We all need a little pat pat in our lives sometimes 💖</p>
+  <form id='form' enctype="multipart/form-data">
+    <div class='form-group'>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex-grow: 1;">
+          <input type='file' class='form-control' id='imageFile' accept=".png,.jpg,.jpeg" required>
+        </div>
+        <div style="flex-grow: 0;">
+          <button type='submit' class='btn btn-pink btn-block'>Generate Pat Pat</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <hr>
+  <div id='img-div'>
+    <img id='image' src='/static/patpats/765597e1e0de514ce4a5b0b286b2.gif' alt='kawaii patpat'>
+    <div id='alerts'></div>
+    <br>
+  </div>
+</div>
+<script src='//code.jquery.com/jquery-3.5.1.slim.min.js' integrity='sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj' crossorigin='anonymous'></script>
+<script src='//cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js' integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo' crossorigin='anonymous'></script>
+<script src='//stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js' integrity='sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI' crossorigin='anonymous'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js'></script>
+<script src='/static/js/main.js'></script>
+</body>
+</html>

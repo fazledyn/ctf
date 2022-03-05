@@ -1,0 +1,6 @@
+- Use Wireshark to analyze the pcapng file
+- Filter by HTTP protocol
+- Look for a POST request with file
+- Extract the content of the POST request
+- Extract it using the file password (it's sent in another POST request)
+

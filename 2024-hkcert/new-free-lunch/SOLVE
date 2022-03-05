@@ -1,0 +1,4 @@
+- Open browser tool, read the source JS
+- Use the console to craft your payload
+- Open Burp, fail the game, capture the packet, modify, and send
+

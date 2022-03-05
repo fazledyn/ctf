@@ -1,0 +1,19 @@
+(env) ❯ python3 ape.py
+[*] Solving discrete log...
+[+] Found Alice's private key: 627400462673893021
+[+] Shared secret: 7315978218281164760
+
+[*] Trying XOR decryption with candidate keys...
+[+] XOR key 37333135393738323138323831313634373630: flag{bd4d7f26-6904-416a-8de0-c2e9538ab74a}
+
+[-] XOR key 6587936d8524dfd8 gave non-printable output
+[-] XOR key 8bdeb29cfba982fbb8c8dd571489ca42c77370ed gave non-printable output
+[-] XOR key bbd3d6afea812754f7f8bdd464cfd9e15280b2a2c177e2fa40e663d09d62980a gave non-printable output
+[-] XOR key adae10bb9ee3f638bc3f88ba67ecd9c3 gave non-printable output
+
+[*] Trying AES decryption (ECB)...
+[!] AES key 37333135393738323138323831313634 error: Data must be aligned to block boundary in ECB mode
+[!] AES key 8bdeb29cfba982fbb8c8dd571489ca42 error: Data must be aligned to block boundary in ECB mode
+[!] AES key bbd3d6afea812754f7f8bdd464cfd9e1 error: Data must be aligned to block boundary in ECB mode
+[!] AES key adae10bb9ee3f638bc3f88ba67ecd9c3 error: Data must be aligned to block boundary in ECB mode
+

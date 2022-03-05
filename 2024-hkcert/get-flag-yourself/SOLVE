@@ -1,0 +1,3 @@
+- Create a simple Go program
+- cat and base64 it
+- Send using ncat

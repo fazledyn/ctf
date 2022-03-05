@@ -1,0 +1,418 @@
+=== pat_pat_generator/run.sh ===
+#!/bin/bash
+
+cp -r /var/backups/app/* /app
+
+python -B /app/run.py
+
+=== pat_pat_generator/build-docker.sh ===
+#!/bin/bash
+docker rm -f web_pat_pat_generator
+docker build -t web_pat_pat_generator .
+docker run --name=web_pat_pat_generator --rm -p1337:1337 -it web_pat_pat_generator
+
+=== pat_pat_generator/flag.txt ===
+flag{f4k3_fl4g_f0r_t3st1ng}
+
+
+=== pat_pat_generator/Dockerfile ===
+FROM python:3.13.3-bookworm
+
+# Install system dependencies
+RUN apt update -y; apt install -y curl supervisor ghostscript
+
+# Install Python dependencies
+RUN pip install flask Pillow
+
+# Switch working environment
+WORKDIR /tmp
+
+# Setup app
+RUN mkdir -p /app
+WORKDIR /app
+
+# Backup application
+RUN mkdir -p /var/backups/app
+COPY challenge /var/backups/app
+
+# Add application
+COPY challenge .
+RUN chown -R www-data:www-data /app
+
+COPY flag.txt /flag.txt
+
+# Setup supervisor
+COPY config/supervisord.conf /etc/supervisord.conf
+
+# copy run.sh
+COPY run.sh /run.sh
+RUN chmod +x /run.sh
+
+# Expose port the server is reachable on
+EXPOSE 1337
+
+# Disable pycache
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Run supervisord
+ENTRYPOINT [ "/usr/bin/supervisord", "-c", "/etc/supervisord.conf" ]
+
+
+=== pat_pat_generator/config/supervisord.conf ===
+[supervisord]
+user=root
+nodaemon=true
+logfile=/dev/null
+logfile_maxbytes=0
+pidfile=/run/supervisord.pid
+
+[program:flask]
+command=/run.sh
+user=www-data
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+
+=== pat_pat_generator/challenge/run.py ===
+from application.main import app
+
+app.run(host='0.0.0.0', debug=True, port=1337)
+
+=== pat_pat_generator/challenge/requirements.txt ===
+Pillow
+Flask
+
+=== pat_pat_generator/challenge/application/config.py ===
+from application.util import generate
+import os
+
+class Config(object):
+    print(os.getcwd(), flush=True)
+    SECRET_KEY = generate(50)
+    UPLOAD_FOLDER = os.getcwd() + '/application/static/patpats'
+    MAX_CONTENT_LENGTH = 2.5 * 1000 * 1000
+
+class ProductionConfig(Config):
+    pass
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+
+class TestingConfig(Config):
+    TESTING = True
+
+=== pat_pat_generator/challenge/application/util.py ===
+import tempfile, glob, os
+from application import main
+from PIL import Image
+
+generate = lambda x: os.urandom(x).hex()
+
+def patmotion(user_image, frames):
+    outputFrames = []
+    for frame in frames:
+        newFrame, i = Image.new('RGBA', frame.size), frames.index(frame)
+        width   = int(75*(0.8 + i * 0.02))
+        height  = int(75*(0.8 + i * 0.05))
+        resized_user_image = user_image.resize((width, height))
+        frame   = frame.convert('RGBA')
+        newFrame.paste(resized_user_image, mask=resized_user_image, box=(30, 37))
+        newFrame.paste(frame, mask=frame)
+        outputFrames.append(newFrame)
+    return outputFrames
+
+def save_tmp(file):
+    tmp  = tempfile.gettempdir()
+    path = os.path.join(tmp, file.filename)
+    file.save(path)
+    return path
+
+def patpat(file):
+    try:
+        tmp_path = save_tmp(file)
+        user_image = Image.open(tmp_path).convert('RGBA')
+        frames = [Image.open(f) for f in sorted(glob.glob('application/static/img/*'))]
+        finalpat = patmotion(user_image, frames)
+
+        filename = f'{generate(14)}.gif'
+        finalpat[0].save(
+            f'{main.app.config["UPLOAD_FOLDER"]}/{filename}', 
+            save_all=True, 
+            duration=30, 
+            loop=0, 
+            append_images=finalpat[1:],
+        )
+        return {'status': 'success', 'image': f'static/patpats/{filename}'}, 200
+    except:
+        return {'status': 'failed', 'message': 'Something went wrong'}, 500
+
+
+=== pat_pat_generator/challenge/application/main.py ===
+from flask import Flask
+from application.blueprints.routes import web, api
+
+app = Flask(__name__)
+app.config.from_object('application.config.Config')
+
+app.register_blueprint(web, url_prefix='/')
+app.register_blueprint(api, url_prefix='/api')
+
+@app.errorhandler(404)
+def not_found(error):
+    return {'error': 'Not Found'}, 404
+
+=== pat_pat_generator/challenge/application/static/js/main.js ===
+const form   = document.getElementById('form');
+const alerts = document.getElementById('alerts');
+const image = document.getElementById('image');
+const fileLabel = document.querySelector('.custom-file-label');
+
+const flash = (message, level) => {
+    alerts.innerHTML += `
+        <div class="alert alert-${level}" role="alert">
+            <p id="closeAlert" class="close" data-dismiss="alert" aria-label="Close"></p>
+            <strong>${message}</strong>
+        </div>
+    `;
+};
+
+
+
+form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const imageFile = document.getElementById('imageFile').files[0];
+    if (!imageFile) {
+        flash('Please select an image file', 'danger');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', imageFile);
+
+    axios
+        .post('/api/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(({ data }) => {
+            if (!data.image) {
+                flash(data.message, 'danger');
+            } else {
+                $('#image').attr('src', data.image);
+            }
+        })
+        .catch(error => {
+            flash('Error processing image file', 'danger');
+        });
+});
+
+=== pat_pat_generator/challenge/application/static/css/main.css ===
+body {
+    font-family: 'Quicksand', sans-serif;
+    min-width: 260px;
+    color: #ff69b4;
+    text-align: center;
+    background-color: #fff0f5;
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  }
+  
+  .btn-pink {
+    background-color: #ff69b4;
+    border-color: #ff69b4;
+    color: white;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-pink:hover {
+    background-color: #ff1493;
+    border-color: #ff1493;
+    transform: scale(1.05);
+  }
+  
+  #main {
+    margin: 30px auto;
+    padding: 25px;
+    border: 3px solid #ffb6c1;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 0 20px rgba(255, 182, 193, 0.3);
+  }
+  
+  #title {
+    color: #ff69b4;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+  }
+  
+  .description {
+    color: #ff69b4;
+    font-size: 1.1em;
+    margin-bottom: 30px;
+  }
+  
+  #image {
+    width: 50vh;
+    padding: 20px;
+    max-width: 100%;
+    display: block;
+    height: auto;
+    margin: auto;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 15px;
+    border: 3px solid #ffb6c1;
+    transition: all 0.3s ease;
+  }
+  
+  #image:hover {
+    animation: bounce 1s infinite;
+    box-shadow: 0 0 15px rgba(255, 182, 193, 0.5);
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .form-control {
+    border: 2px solid #ffb6c1;
+    border-radius: 10px;
+    padding: 12px;
+    transition: all 0.3s ease;
+  }
+  
+  .form-control:focus {
+    border-color: #ff69b4;
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.2);
+  }
+  
+  .alert {
+    border-radius: 10px;
+    border: none;
+    background-color: #fff0f5;
+    color: #ff69b4;
+  }
+  
+  .btn-block {
+    width: auto;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 600;
+  }
+  
+  hr {
+    border-color: #ffb6c1;
+    margin: 30px 0;
+  }
+  
+  .custom-file {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+  
+  .custom-file-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  .custom-file-label {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: white;
+    border: 2px solid #ffb6c1;
+    border-radius: 10px;
+    color: #ff69b4;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-file-label:hover {
+    border-color: #ff69b4;
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.2);
+  }
+  
+
+  
+
+=== pat_pat_generator/challenge/application/blueprints/routes.py ===
+from flask import Blueprint, request, render_template
+from application.util import patpat
+
+web = Blueprint('web', __name__)
+api = Blueprint('api', __name__)
+
+@web.route('/')
+def index():
+    return render_template('index.html')
+
+@api.route('/upload', methods=['POST'])
+def upload():
+    if 'file' not in request.files:
+        return {'status': 'failed', 'message': 'No file provided'}, 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return {'status': 'failed', 'message': 'No file selected'}, 400
+
+    return patpat(file)
+
+=== pat_pat_generator/challenge/application/templates/index.html ===
+<html>
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+  <title>Pat Pat Generator</title>
+  <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin='anonymous'>
+  <link href='//fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap' rel='stylesheet'>
+  <link rel='stylesheet' href='/static/css/main.css' />
+  <meta name="author" content="rayhan0x01">
+</head>
+<body>
+<div id='main' class='container'>
+  <h1 id='title'>✨ Pat Pat Generator ✨</h1>
+  <p class='description'>We all need a little pat pat in our lives sometimes 💖</p>
+  <form id='form' enctype="multipart/form-data">
+    <div class='form-group'>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex-grow: 1;">
+          <input type='file' class='form-control' id='imageFile' accept=".png,.jpg,.jpeg" required>
+        </div>
+        <div style="flex-grow: 0;">
+          <button type='submit' class='btn btn-pink btn-block'>Generate Pat Pat</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <hr>
+  <div id='img-div'>
+    <img id='image' src='/static/patpats/765597e1e0de514ce4a5b0b286b2.gif' alt='kawaii patpat'>
+    <div id='alerts'></div>
+    <br>
+  </div>
+</div>
+<script src='//code.jquery.com/jquery-3.5.1.slim.min.js' integrity='sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj' crossorigin='anonymous'></script>
+<script src='//cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js' integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo' crossorigin='anonymous'></script>
+<script src='//stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js' integrity='sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI' crossorigin='anonymous'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js'></script>
+<script src='/static/js/main.js'></script>
+</body>
+</html>
+

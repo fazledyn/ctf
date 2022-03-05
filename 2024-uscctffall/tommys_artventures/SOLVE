@@ -1,0 +1,5 @@
+- See that it's a Flask server
+- Install `flask-unsign` from PyPI
+- Use the tool to craft a new session cookie using the Flask secret and payload
+- Replace the cookie, done
+

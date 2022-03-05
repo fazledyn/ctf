@@ -1,0 +1,3 @@
+- Run exiftool
+- Get a base64 looking string
+- Reverse the string twice

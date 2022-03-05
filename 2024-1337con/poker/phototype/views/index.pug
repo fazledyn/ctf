@@ -1,0 +1,42 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  title Poker
+  link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap')
+  link(rel='stylesheet' href='asset/style.css')
+// partial:index.partial.html
+main
+  section
+    aside
+      span A
+    aside
+      span A
+main3
+  .container(style='justify-content: center; align-items: center;')
+    h3(style="color: #F23D4C; font-size: 4vh; font-family: 'Cinzel', serif;") What is the Card name:
+    br
+    p(style="color: #F23D4C; font-family: 'Cinzel', serif;") 1. King
+    p(style="color: #F23D4C; font-family: 'Cinzel', serif;") 2. AST Ace Of Spades
+    p(style="color: #F23D4C; font-family: 'Cinzel', serif;") 3. Diamonds
+    p(style="color: #F23D4C; font-family: 'Cinzel', serif;") 4. polluting Poker
+    br
+main2
+  br
+  br
+  .container(style='justify-content: center; align-items: center;')
+    form#form(action='' method='post')
+      section2
+        textarea.cursor.blink(type='text' name='name' placeholder='▮' autocomplete='off' required='' style='background: transparent;border: transparent;height: 30vh;width: 120vh; color: wheat; font-size:5vh;')
+      br
+      center
+        button.btn(type='submit') Submit
+center
+  section3
+    footer.border.blue
+      p#output.page-author(style='color: white;')
+        | Input your Choice and you will enter a Lucky Draw
+
+// partial
+script(src='asset/script.js')
+script(src='asset/js/main.js')
+
