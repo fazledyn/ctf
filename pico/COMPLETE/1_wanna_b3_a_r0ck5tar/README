@@ -1,0 +1,8 @@
+1. This is also in Rockstar Langugage but won't run using the web IDE
+2. So, downloaded the python transpiler from https://github.com/yyyyyyyan/rockstar-py
+3. After that, used the command `rockstar-py -i lyrics.txt -o output.py` to generate the python script
+4. However, the script won't run. So inspected the code and got the list of int.
+5. Using `solve.py` gives a little clue
+6. Use brain and we get the flag!
+
+Flag: picoCTF{BONJOVI}

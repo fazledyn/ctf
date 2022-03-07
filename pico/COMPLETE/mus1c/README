@@ -1,0 +1,6 @@
+1. Go to https://codewithrockstar.com/online
+2. Put the entire lyrics
+3. Compile and get the int list
+4. Dump it in output and use `solve.py`
+
+Flag: picoCTF{rrrocknrn0113r}
