@@ -1,0 +1,5 @@
+- Based on the encoder script, it looks like some heavy computation
+- I don't remember the exact theory of arithmetic to do it myself
+- I asked claude to do it
+- Use the claude.decoder_bruteforce.py to run the message.txt
+
