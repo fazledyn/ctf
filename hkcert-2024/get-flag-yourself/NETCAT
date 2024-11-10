@@ -1,0 +1,2 @@
+ncat --ssl c03-get-flag-yourself.hkcert24.pwnable.hk 1337
+
